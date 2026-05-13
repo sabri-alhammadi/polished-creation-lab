@@ -181,7 +181,7 @@ function ProductPage() {
 
           {tab === "desc" && (
             <ul className="grid sm:grid-cols-2 gap-3 max-w-3xl">
-              {product.features.map((f) => (
+              {product.features.map((f: string) => (
                 <li key={f} className="flex items-start gap-3 p-4 rounded-xl bg-gradient-card border border-border">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                   <span className="text-sm">{f}</span>
@@ -192,7 +192,7 @@ function ProductPage() {
 
           {tab === "specs" && (
             <div className="max-w-2xl rounded-xl overflow-hidden border border-border">
-              {product.specs.map((s, i) => (
+              {product.specs.map((s: { label: string; value: string }, i: number) => (
                 <div key={s.label} className={`flex justify-between p-4 ${i % 2 === 0 ? "bg-surface" : "bg-surface-elevated"}`}>
                   <span className="text-muted-foreground">{s.label}</span>
                   <span className="font-bold">{s.value}</span>
