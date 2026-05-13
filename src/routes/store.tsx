@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { products, type Product } from "@/lib/products";
 import { useMemo, useState } from "react";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, Eye, Star } from "lucide-react";
+import { useCart } from "@/lib/cart";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/store")({
   head: () => ({
@@ -89,20 +91,62 @@ function StorePage() {
 }
 
 function ProductCard({ p }: { p: Product }) {
+  const { add } = useCart();
+  const discount = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
   return (
-    <div className="group rounded-2xl overflow-hidden bg-gradient-card border border-border hover:border-primary/50 transition-all shadow-card hover:shadow-glow">
-      <div className="aspect-square overflow-hidden bg-surface">
+    <div className="group rounded-2xl overflow-hidden bg-gradient-card border border-border hover:border-primary/50 transition-all shadow-card hover:shadow-glow flex flex-col">
+      <Link to="/store/$productId" params={{ productId: p.id }} className="relative aspect-square overflow-hidden bg-surface block">
         <img src={p.image} alt={p.name} loading="lazy" width={1024} height={1024} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-      </div>
-      <div className="p-6">
-        <div className="text-xs text-primary tracking-widest mb-2">{p.brand}</div>
-        <h3 className="font-bold text-lg mb-2 leading-snug">{p.name}</h3>
-        <p className="text-sm text-muted-foreground mb-5 line-clamp-2">{p.description}</p>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="font-display text-2xl font-black">{p.price.toLocaleString()} <span className="text-sm font-medium text-muted-foreground">ريال</span></div>
+        {discount > 0 && (
+          <div className="absolute top-3 right-3 bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-md">
+            خصم {discount}%
           </div>
-          <button className="inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-4 py-2.5 rounded-lg text-sm font-bold hover:opacity-90 transition">
+        )}
+        {p.stock < 10 && (
+          <div className="absolute bottom-3 right-3 bg-background/80 backdrop-blur text-xs px-2 py-1 rounded-md border border-border">
+            متبقي {p.stock}
+          </div>
+        )}
+      </Link>
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-xs text-primary tracking-widest">{p.brand}</div>
+          <div className="flex items-center gap-1 text-xs">
+            <Star className="w-3 h-3 fill-primary text-primary" />
+            <span className="font-bold">{p.rating}</span>
+            <span className="text-muted-foreground">({p.reviews})</span>
+          </div>
+        </div>
+        <h3 className="font-bold text-lg mb-2 leading-snug">{p.name}</h3>
+        <p className="text-sm text-muted-foreground mb-5 line-clamp-2 flex-1">{p.description}</p>
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <div className="font-display text-2xl font-black">
+              {p.price.toLocaleString()} <span className="text-sm font-medium text-muted-foreground">ريال</span>
+            </div>
+            {p.oldPrice && (
+              <div className="text-xs text-muted-foreground line-through">
+                {p.oldPrice.toLocaleString()} ريال
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <Link
+            to="/store/$productId"
+            params={{ productId: p.id }}
+            className="inline-flex items-center justify-center gap-1.5 bg-surface border border-border text-foreground px-3 py-2.5 rounded-lg text-sm font-bold hover:border-primary/50 transition"
+          >
+            <Eye className="w-4 h-4" />
+            التفاصيل
+          </Link>
+          <button
+            onClick={() => {
+              add(p.id);
+              toast.success("تمت الإضافة إلى السلة");
+            }}
+            className="inline-flex items-center justify-center gap-1.5 bg-gradient-primary text-primary-foreground px-3 py-2.5 rounded-lg text-sm font-bold hover:opacity-90 transition"
+          >
             <ShoppingCart className="w-4 h-4" />
             أضف
           </button>
