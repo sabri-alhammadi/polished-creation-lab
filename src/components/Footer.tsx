@@ -39,9 +39,9 @@ export function Footer() {
           <div>
             <h4 className="font-bold mb-4 text-sm tracking-wide">تواصل معنا</h4>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-primary" /> 920000000</li>
-              <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-primary" /> info@arc-sec.sa</li>
-              <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> الرياض، السعودية</li>
+              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-primary" /><span>920000000</span></li>
+              <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-primary" /><span>info@arc-sec.sa</span></li>
+              <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /><span>الرياض، السعودية</span></li>
             </ul>
           </div>
         </div>
