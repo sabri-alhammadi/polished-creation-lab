@@ -9,9 +9,6 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { CartProvider } from "@/lib/cart";
-import { CartDrawer } from "@/components/CartDrawer";
-import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -78,11 +75,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "آرك — تركيب وصيانة الأنظمة الأمنية" },
       { name: "description", content: "حلول أمنية متكاملة، كاميرات مراقبة، أنظمة إنذار، وفحص فني سريع." },
       { name: "author", content: "ARC Security" },
-      { property: "og:title", content: "آرك — الأنظمة الأمنية" },
-      { property: "og:description", content: "حلول أمنية متكاملة وفحص فني سريع." },
+      { property: "og:title", content: "آرك — تركيب وصيانة الأنظمة الأمنية" },
+      { property: "og:description", content: "حلول أمنية متكاملة، كاميرات مراقبة، أنظمة إنذار، وفحص فني سريع." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "آرك — تركيب وصيانة الأنظمة الأمنية" },
+      { name: "twitter:description", content: "حلول أمنية متكاملة، كاميرات مراقبة، أنظمة إنذار، وفحص فني سريع." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b52c3e06-f702-43d5-bb59-2a6e2fe3ef17/id-preview-3ecf7d09--d576bad7-0a25-4c53-8f86-1eeff0dcfec8.lovable.app-1778699026981.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b52c3e06-f702-43d5-bb59-2a6e2fe3ef17/id-preview-3ecf7d09--d576bad7-0a25-4c53-8f86-1eeff0dcfec8.lovable.app-1778699026981.png" },
     ],
     links: [
       {
@@ -116,11 +117,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <Outlet />
-        <CartDrawer />
-        <Toaster position="top-center" richColors theme="dark" />
-      </CartProvider>
+      <Outlet />
     </QueryClientProvider>
   );
 }
