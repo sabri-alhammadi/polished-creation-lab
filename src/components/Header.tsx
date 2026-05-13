@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Shield, Menu, X } from "lucide-react";
+import { Shield, Menu, X, ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/lib/cart";
 
 const links = [
   { to: "/", label: "الرئيسية" },
@@ -12,6 +13,7 @@ const links = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { count, setOpen: setCartOpen } = useCart();
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
@@ -38,18 +40,29 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCartOpen(true)}
+            className="relative w-11 h-11 rounded-lg bg-surface border border-border hover:border-primary/50 flex items-center justify-center transition"
+            aria-label="السلة"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            {count > 0 && (
+              <span className="absolute -top-1 -left-1 min-w-[20px] h-5 px-1 rounded-full bg-gradient-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shadow-glow">
+                {count}
+              </span>
+            )}
+          </button>
           <Link
             to="/inspection"
-            className="inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-bold shadow-glow hover:opacity-90 transition"
+            className="hidden lg:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-bold shadow-glow hover:opacity-90 transition"
           >
             طلب فحص فوري
           </Link>
+          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-foreground">
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
-
-        <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-foreground">
-          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
       </div>
 
       {open && (
