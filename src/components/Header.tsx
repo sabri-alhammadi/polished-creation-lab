@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Shield, Menu, X, ShoppingCart } from "lucide-react";
+import { Shield, Menu, X, ShoppingCart, User as UserIcon, LogIn } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
+import { useAuth } from "@/lib/auth";
 
 const links = [
   { to: "/", label: "الرئيسية" },
@@ -14,6 +15,8 @@ const links = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const { count, setOpen: setCartOpen } = useCart();
+  const { user } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
@@ -53,6 +56,26 @@ export function Header() {
               </span>
             )}
           </button>
+
+          {user ? (
+            <Link
+              to="/account"
+              className="hidden sm:inline-flex items-center gap-2 bg-surface border border-border hover:border-primary/50 px-3 h-11 rounded-lg text-sm font-bold transition"
+              aria-label="حسابي"
+            >
+              <UserIcon className="w-4 h-4" />
+              <span className="max-w-[100px] truncate">{user.email?.split("@")[0]}</span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="hidden sm:inline-flex items-center gap-2 bg-surface border border-border hover:border-primary/50 px-3 h-11 rounded-lg text-sm font-bold transition"
+            >
+              <LogIn className="w-4 h-4" />
+              دخول
+            </Link>
+          )}
+
           <Link
             to="/inspection"
             className="hidden lg:inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-5 py-2.5 rounded-lg text-sm font-bold shadow-glow hover:opacity-90 transition"
@@ -79,6 +102,14 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              to={user ? "/account" : "/login"}
+              onClick={() => setOpen(false)}
+              className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-surface flex items-center gap-2"
+            >
+              <UserIcon className="w-4 h-4" />
+              {user ? "حسابي" : "تسجيل الدخول"}
+            </Link>
           </div>
         </div>
       )}
